@@ -1,7 +1,7 @@
-import { MessageCircle, Map, Bell } from "lucide-react"
+import { MessageCircle, Map, User } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
-export type TabType = "home" | "explore" | "activity"
+export type TabType = "home" | "explore" | "profile"
 
 export interface TabConfig {
   id: TabType
@@ -12,5 +12,5 @@ export interface TabConfig {
 export const TABS: TabConfig[] = [
   { id: "home", label: "홈", icon: MessageCircle },
   { id: "explore", label: "탐색", icon: Map },
-  { id: "activity", label: "알림", icon: Bell },
+  { id: "profile", label: "내 정보", icon: User },
 ]
