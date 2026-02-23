@@ -1,0 +1,23 @@
+{
+  "name": "다 알리도 - 부산 초로컬 커뮤니티",
+  "short_name": "다 알리도",
+  "description": "부산의 실시간 동네 라디오. 로컬과 방문객이 함께 만드는 하이퍼로컬 커뮤니티 서비스.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
