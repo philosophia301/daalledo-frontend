@@ -88,10 +88,10 @@ export function useChat() {
   }, [connect]);
 
   const sendMessage = useCallback(
-    (content: string, avatar: string, name: string) => {
+    (content: string, avatar: string, name: string, badge: { label: string; variant: "local" | "visitor" }) => {
       const ws = wsRef.current;
       if (!ws || ws.readyState !== WebSocket.OPEN) return;
-      ws.send(JSON.stringify({ type: "send_message", content, avatar, name }));
+      ws.send(JSON.stringify({ type: "send_message", content, avatar, name, badge }));
     },
     []
   );

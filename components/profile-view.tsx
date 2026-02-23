@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { Check, Pencil } from "lucide-react"
-import { useProfile } from "@/contexts/profile-context"
+import { useProfile, BADGES, type BadgeVariant } from "@/contexts/profile-context"
 
 const EMOJI_OPTIONS = [
   "🐦", "🐱", "🐶", "🐰", "🦊", "🐻", "🐼", "🐨",
@@ -11,7 +11,7 @@ const EMOJI_OPTIONS = [
 ]
 
 export function ProfileView() {
-  const { emoji, nickname, setEmoji, setNickname } = useProfile()
+  const { emoji, nickname, badge, setEmoji, setNickname, setBadgeVariant } = useProfile()
   const [isEditing, setIsEditing] = useState(false)
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
   const [draft, setDraft] = useState(nickname)
@@ -131,6 +131,26 @@ export function ProfileView() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Badge selector */}
+          <div className="flex gap-2 mb-5">
+            {BADGES.map((b) => (
+              <button
+                key={b.variant}
+                type="button"
+                onClick={() => setBadgeVariant(b.variant)}
+                className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  badge.variant === b.variant
+                    ? b.variant === "local"
+                      ? "bg-blue-50 text-blue-600 ring-2 ring-blue-400"
+                      : "bg-orange-50 text-orange-600 ring-2 ring-orange-400"
+                    : "bg-gray-50 text-gray-400"
+                }`}
+              >
+                {b.label}
+              </button>
+            ))}
           </div>
 
           <div className="grid grid-cols-3 border-t border-gray-100 pt-4 text-center">

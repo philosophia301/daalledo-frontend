@@ -170,10 +170,10 @@ function ChatInput({ onSend }: { onSend: (content: string) => void }) {
 
 export function HomeView() {
   const { messages, onlineCount, sendMessage } = useChat()
-  const { emoji, nickname } = useProfile()
+  const { emoji, nickname, badge } = useProfile()
 
   const handleSend = (content: string) => {
-    sendMessage(content, emoji, nickname)
+    sendMessage(content, emoji, nickname, badge)
   }
 
   return (
