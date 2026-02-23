@@ -20,7 +20,6 @@ export interface UserIdentity {
 type WSServerEvent =
   | {
       type: "init";
-      user: UserIdentity;
       messages: ChatMessage[];
       onlineCount: number;
     }
@@ -37,7 +36,6 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [onlineCount, setOnlineCount] = useState(0);
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
-  const [user, setUser] = useState<UserIdentity | null>(null);
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -58,7 +56,6 @@ export function useChat() {
 
       switch (event.type) {
         case "init":
-          setUser(event.user);
           setMessages(event.messages);
           setOnlineCount(event.onlineCount);
           break;
@@ -90,11 +87,14 @@ export function useChat() {
     };
   }, [connect]);
 
-  const sendMessage = useCallback((content: string) => {
-    const ws = wsRef.current;
-    if (!ws || ws.readyState !== WebSocket.OPEN) return;
-    ws.send(JSON.stringify({ type: "send_message", content }));
-  }, []);
+  const sendMessage = useCallback(
+    (content: string, avatar: string, name: string) => {
+      const ws = wsRef.current;
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+      ws.send(JSON.stringify({ type: "send_message", content, avatar, name }));
+    },
+    []
+  );
 
-  return { messages, onlineCount, status, user, sendMessage };
+  return { messages, onlineCount, status, sendMessage };
 }

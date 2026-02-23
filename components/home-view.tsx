@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { Send, ImagePlus } from "lucide-react"
 import { useChat, type ChatMessage } from "@/hooks/use-chat"
+import { useProfile } from "@/contexts/profile-context"
 
 function HomeHeader({ onlineCount }: { onlineCount: number }) {
   return (
@@ -22,13 +23,27 @@ function ChatBubble({
   avatar,
   name,
   badge,
+  isMine,
   children,
 }: {
   avatar: string
   name: string
   badge: { label: string; variant: "local" | "visitor" }
+  isMine: boolean
   children: React.ReactNode
 }) {
+  if (isMine) {
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[75%]">
+          <div className="bg-blue-500 text-white rounded-2xl rounded-tr-sm px-3.5 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] text-sm leading-relaxed inline-block">
+            {children}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex items-start gap-2.5">
       <div
@@ -58,7 +73,15 @@ function ChatBubble({
   )
 }
 
-function ChatFeed({ messages }: { messages: ChatMessage[] }) {
+function ChatFeed({
+  messages,
+  myAvatar,
+  myName,
+}: {
+  messages: ChatMessage[]
+  myAvatar: string
+  myName: string
+}) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -78,6 +101,7 @@ function ChatFeed({ messages }: { messages: ChatMessage[] }) {
           avatar={msg.avatar}
           name={msg.name}
           badge={msg.badge}
+          isMine={msg.avatar === myAvatar && msg.name === myName}
         >
           {msg.content}
         </ChatBubble>
@@ -146,12 +170,17 @@ function ChatInput({ onSend }: { onSend: (content: string) => void }) {
 
 export function HomeView() {
   const { messages, onlineCount, sendMessage } = useChat()
+  const { emoji, nickname } = useProfile()
+
+  const handleSend = (content: string) => {
+    sendMessage(content, emoji, nickname)
+  }
 
   return (
     <>
       <HomeHeader onlineCount={onlineCount} />
-      <ChatFeed messages={messages} />
-      <ChatInput onSend={sendMessage} />
+      <ChatFeed messages={messages} myAvatar={emoji} myName={nickname} />
+      <ChatInput onSend={handleSend} />
     </>
   )
 }
